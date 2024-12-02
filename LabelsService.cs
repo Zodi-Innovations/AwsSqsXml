@@ -21,7 +21,7 @@ namespace AwsSqsXml
                             .Elements("LineTextSpan")
                             .Elements("TextSpan")
                             .Elements("Text")
-                            .FirstOrDefault()?.SetValue($"{messageData.firstName} {messageData.lastName}");
+                            .FirstOrDefault()?.SetValue($"{messageData.firstname} {messageData.lastname}");
                     }
                     else if (textObject.Element("Name")?.Value == "TextObject1")
                     {
@@ -47,7 +47,28 @@ namespace AwsSqsXml
                             .Elements("Text")
                             .FirstOrDefault()?.SetValue($"{messageData.country}");
                     }
+
+                    else if (textObject.Element("Name")?.Value == "TextObject4")
+                        textObject.Descendants("FormattedText")
+                            .Elements("LineTextSpan")
+                            .Elements("TextSpan")
+                            .Elements ("Text")
+                            .FirstOrDefault()?.SetValue($"{messageData.clubName}" );  
                 }
+                var qrCodeObjects = xDocument.Descendants("QrCodeObject");
+                foreach (var qrCodeObject in qrCodeObjects) 
+                    if (qrCodeObject.Element("Name")?.Value == "QRCodeObject0")
+                    {
+                        qrCodeObject.Descendants("Data")
+                            .Elements("DataString")
+                            .FirstOrDefault()?.SetValue($"{messageData.uuid}");
+                        qrCodeObject.Descendants("TextHolder")
+                          .Elements("Value")
+                          .FirstOrDefault()?.SetValue($"{messageData.uuid}");
+                    }
+
+
+
 
                 xDocument.Save(XmlContent);
                 Console.WriteLine("Label XML is succesvol bijgewerkt.");

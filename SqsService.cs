@@ -2,6 +2,7 @@
 using Amazon.SQS.Model;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AwsSqsXml
@@ -32,6 +33,8 @@ namespace AwsSqsXml
             {
                 try
                 {
+                    var jsonString = DecodeAsciiToJson(message.Body);
+
                     var data = System.Text.Json.JsonSerializer.Deserialize<MessageData>(message.Body);
                     messages.Add(data);
 
@@ -49,16 +52,25 @@ namespace AwsSqsXml
 
             return messages;
         }
+        private string DecodeAsciiToJson(string asciiData)
+        {
+            byte[] asciiBytes = Encoding.ASCII.GetBytes(asciiData);
+            return Encoding.ASCII.GetString(asciiBytes);
+        }
     }
 
     public class MessageData
     {
-        public string firstName { get; set; }
-        public string lastName { get; set; }
+        public string firstname { get; set; }
+        public string lastname { get; set; }
         public string street { get; set; }
         public string houseNumber { get; set; }
         public string city { get; set; }
         public string zip { get; set; }
         public string country { get; set; }
+
+        public string  clubName { get; set; }
+        public string uuid { get; set; }
+        public string clubLogo { get; set; }
     }
 }
